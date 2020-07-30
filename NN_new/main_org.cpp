@@ -45,13 +45,13 @@ int main(void) {
 	eldata el;
 	//教師データ
 	el.Tin = (double**)malloc(sizeof(double*) * data);
-	el.Tin[0] = (double*)malloc(sizeof(double) * data * in);				//2次元	教師データ数*入力次元
+	el.Tin[0] = (double*)malloc(sizeof(double) * data * in);				//2次元
 	for (i = 1; i < data; i++) {
 		el.Tin[i] = el.Tin[0] + i * in;
 	}
 	//教師出力データ
 	el.Tout = (double**)malloc(sizeof(double) * data);
-	el.Tout[0] = (double*)malloc(sizeof(double) * data * out);				//2次元	教師データ数*出力次元
+	el.Tout[0] = (double*)malloc(sizeof(double) * data * out);				//2次元
 	for (i = 1; i < data; i++) {
 		el.Tout[i] = el.Tout[0] + i * out;
 	}
@@ -102,23 +102,23 @@ int main(void) {
 		count++;
 		//}
 	}
-	//教師データごとの各素子の出力値用
+
 	//出力層二次元に対応
 	el.out = (double**)malloc(sizeof(double) * data);
-	el.out[0] = (double*)malloc(sizeof(double) * data * out);				//2次元	データ数*出力次元
+	el.out[0] = (double*)malloc(sizeof(double) * data * out);				//2次元
 	for (i = 1; i < data; i++) {
 		el.out[i] = el.out[0] + i * out;
 	}
 	for (i = 0; i < data; i++) {
 		for (j = 0; j < out; j++) {
-			el.out[i][j] = 0;	//初期化
+			el.out[i][j] = 0;
 		}
 	}
 
 	//中間層
 	el.mid = (double***)malloc(sizeof(double**) * data);
 	el.mid[0] = (double**)malloc(sizeof(double*) * data * layer);
-	el.mid[0][0] = (double*)malloc(sizeof(double) * data * layer * element);	//3次元	データ数*層数*素子数
+	el.mid[0][0] = (double*)malloc(sizeof(double) * data * layer * element);	//3次元
 	for (i = 0; i < data; i++) {
 		el.mid[i] = el.mid[0] + i * layer;
 		for (j = 0; j < layer; j++) {
@@ -128,7 +128,7 @@ int main(void) {
 	for (i = 0; i < data; i++) {
 		for (j = 0; j < layer; j++) {
 			for (k = 0; k < element; k++) {
-				el.mid[i][j][k] = 0;	//初期化
+				el.mid[i][j][k] = 0;
 				//printf("%f", el.mid[i][j][k]);
 			}
 		}
@@ -136,23 +136,23 @@ int main(void) {
 	//printf("NN\n");
 
 
-	//誤差伝搬用
+
 	errordata error;
 	error.in = (double**)malloc(sizeof(double*) * data);
-	error.in[0] = (double*)malloc(sizeof(double) * data * in);				//2次元	データ数*入力次元
+	error.in[0] = (double*)malloc(sizeof(double) * data * in);				//2次元
 	for (i = 1; i < data; i++) {
 		error.in[i] = error.in[0] + i * in;
 	}
 	for (i = 0; i < data; i++) {
 		for (j = 0; j < in; j++) {
-			error.in[i][j] = 0;		//初期化
+			error.in[i][j] = 0;
 			//printf("error.in %f", error.in[i][j]);
 		}
 	}
 
 	error.mid = (double***)malloc(sizeof(double**) * data);
 	error.mid[0] = (double**)malloc(sizeof(double*) * data * layer);
-	error.mid[0][0] = (double*)malloc(sizeof(double) * data * layer * (element + 1));	//3次元	データ数*層数*素子数
+	error.mid[0][0] = (double*)malloc(sizeof(double) * data * layer * (element + 1));	//3次元
 	for (i = 0; i < data; i++) {
 		error.mid[i] = error.mid[0] + i * layer;
 		for (j = 0; j < layer; j++) {
@@ -162,7 +162,7 @@ int main(void) {
 	for (i = 0; i < data; i++) {
 		for (j = 0; j < layer; j++) {
 			for (k = 0; k < element + 1; k++) {
-				error.mid[i][j][k] = 0;		//初期化
+				error.mid[i][j][k] = 0;
 				//printf("errormid %f  ", error.mid[i][j][k]);
 			}
 			//printf("\n");
@@ -173,7 +173,7 @@ int main(void) {
 
 	//出力層の次元数に対応
 	error.out = (double**)malloc(sizeof(double) * data);
-	error.out[0] = (double*)malloc(sizeof(double) * data * out);				//2次元	データ数*出力次元
+	error.out[0] = (double*)malloc(sizeof(double) * data * out);				//2次元
 	for (i = 1; i < data; i++) {
 		error.out[i] = error.out[0] + i * out;
 	}
@@ -187,14 +187,14 @@ int main(void) {
 	//重みの領域確保と初期化
 	wdata w;
 	w.w1 = (double**)malloc(sizeof(double*) * in + 1);
-	w.w1[0] = (double*)malloc(sizeof(double) * (in + 1) * element);						//2次元 入力→中間層　(in+1)*element
+	w.w1[0] = (double*)malloc(sizeof(double) * (in + 1) * element);						//2次元
 	for (i = 1; i < (in + 1); i++) {
 		w.w1[i] = w.w1[0] + i * element;
 	}
 
 	w.w2 = (double***)malloc(sizeof(double**) * (layer - 1));
 	w.w2[0] = (double**)malloc(sizeof(double*) * (layer - 1) * (element + 1));
-	w.w2[0][0] = (double*)malloc(sizeof(double) * (layer - 1) * (element + 1) * element);	//3次元	(layer-1)*(element+1)*element
+	w.w2[0][0] = (double*)malloc(sizeof(double) * (layer - 1) * (element + 1) * element);	//3次元
 	for (i = 0; i < (layer - 1); i++) {
 		w.w2[i] = w.w2[0] + i * (element + 1);
 		for (j = 0; j < (element + 1); j++) {
@@ -204,7 +204,7 @@ int main(void) {
 
 	//出力層の次元数の変化に対応
 	w.w3 = (double**)malloc(sizeof(double*) * (element + 1));
-	w.w3[0] = (double*)malloc(sizeof(double) * (element + 1) * out);						//2次元	(element+1)*out
+	w.w3[0] = (double*)malloc(sizeof(double) * (element + 1) * out);						//2次元
 	for (i = 1; i < (element + 1); i++) {
 		w.w3[i] = w.w3[0] + i * out;
 	}
